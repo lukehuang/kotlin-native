@@ -95,10 +95,15 @@ class IrReturnableBlockImpl(startOffset: Int, endOffset: Int, type: KotlinType,
 
 //-----------------------------------------------------------------------------//
 /**
-*  FileEntry provides mapping file offset to pair line and column which are used in debug information generation.
+ * TODO
+ * FileEntry provides mapping file offset to pair line and column which are used in debug information generation.
+ * NaiveSourceBasedFileEntryImpl implements the functionality with calculation lines and columns at compile time,
+ * that obligates user to have sources of all dependencies, that not always possible and intuitively clear. Instead new
+ * version should rely on serialized mapping (offset to pair line and column), which should be generated at library
+ * compilation stage (perhaps in or before inline face)
 */
 
-class FileEntryImpl(override val name: String) : SourceManager.FileEntry {
+class NaiveSourceBasedFileEntryImpl(override val name: String) : SourceManager.FileEntry {
 
     private val lineStartOffsets: IntArray
 
@@ -149,15 +154,10 @@ class FileEntryImpl(override val name: String) : SourceManager.FileEntry {
 }
 
 //-----------------------------------------------------------------------------//
-/**
- * NaiveSourceBasedFileEntryImpl implements the functionality with calculation lines and columns at compile time,
- * that obligates user to have sources of all dependencies, that not always possible and intuitively clear. Instead new
- * version should rely on serialized mapping (offset to pair line and column), which should be generated at library
- * compilation stage (perhaps in or before inline face)
- */
-class NaiveSourceBasedFileEntryImpl(fileName: String) : IrFile {
 
-    override val fileEntry = FileEntryImpl(fileName)
+class IrFileImpl(fileName: String) : IrFile {
+
+    override val fileEntry = NaiveSourceBasedFileEntryImpl(fileName)
 
     //-------------------------------------------------------------------------//
 

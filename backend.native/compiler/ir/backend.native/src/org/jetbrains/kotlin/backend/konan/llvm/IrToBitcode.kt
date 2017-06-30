@@ -1414,7 +1414,7 @@ internal class CodeGeneratorVisitor(val context: Context) : IrElementVisitorVoid
 
     //-------------------------------------------------------------------------//
 
-    private inner class ReturnableBlockScope(val returnableBlock: IrReturnableBlockImpl) : FileScope(NaiveSourceBasedFileEntryImpl(returnableBlock.sourceFileName)) {
+    private inner class ReturnableBlockScope(val returnableBlock: IrReturnableBlockImpl) : FileScope(IrFileImpl(returnableBlock.sourceFileName)) {
 
         var bbExit : LLVMBasicBlockRef? = null
         var resultPhi : LLVMValueRef? = null
